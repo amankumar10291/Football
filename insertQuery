@@ -1,0 +1,39 @@
+INSERT INTO `Continent` (`id`, `name`)
+VALUES
+	(1, 'EUROPE'),
+	(2, 'ASIA');
+
+INSERT INTO `Country` (`id`, `name`, `continent_id`)
+VALUES
+	(1, 'UK', 1),
+	(2, 'SPAIN', 1),
+	(3, 'INDIA', 2);
+INSERT INTO `League` (`id`, `name`, `startedOn`, `country_id`)
+VALUES
+	(1, 'EPL', NULL, 1),
+	(2, 'ISL', NULL, 3),
+	(3, 'LaLiga', NULL, 2);
+INSERT INTO `league_teams` (`id`, `leagueId`, `season`, `team_id`)
+VALUES
+	(1, 1, '2020-2021', 1),
+	(2, 1, '2020-2021', 2),
+	(3, 1, '2020-2021', 3),
+	(4, 1, '2020-2021', 4),
+	(5, 1, '2020-2021', 5);
+INSERT INTO `Team` (`id`, `code`, `foundedAt`, `name`, `teamType`, `city`, `homeGround`)
+VALUES
+	(1, 'LIV', NULL, 'Liverpool', 0, NULL, NULL),
+	(2, 'MUTD', NULL, 'Manchestor United', 0, NULL, NULL),
+	(3, 'MCITY', NULL, 'Manchestor City', 0, NULL, NULL),
+	(4, 'CHE', NULL, 'Chelsea', 0, NULL, NULL),
+	(5, 'TOT', NULL, 'Tottenham', 0, NULL, NULL),
+	(6, 'WOLVES', NULL, 'WOLVERHAMPTON', 0, NULL, NULL);
+
+
+INSERT INTO `Game` (`id`, `awayTeamScored`, `homeTeamScored`, `playedOn`, `redCard`, `season`, `yellowCard`, `awayTeam_id`, `homeTeam_id`, `league_id`, `stadium_id`)
+VALUES
+	(1, 1, 2, NULL, 0, '2020-2021', 0, 2, 1, 1, NULL);
+INSERT INTO `TeamStanding` (`id`, `goalFaced`, `goalScored`, `matchesDrawn`, `matchesLoss`, `matchesPlayed`, `matchesWon`, `points`, `position`, `teamId`)
+VALUES
+	(1, 2, 3, 0, 5, 10, 5, 15, 2, 1),
+	(2, 3, 3, 2, 3, 10, 5, 12, 4, 1);

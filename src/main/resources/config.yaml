@@ -1,0 +1,19 @@
+database:
+  driverClass: com.mysql.jdbc.Driver
+  user: root
+  password:
+  url: jdbc:mysql://localhost:3306/football
+  properties:
+    charSet: UTF-8
+    hibernate.show_sql: true
+    hibernate.hbm2ddl.auto: validate
+#    hibernate.dialect: org.hibernate.dialect.MySQLInnoDBDialect
+
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 1100
+  adminConnectors:
+    - type: http
+      port: 1101
