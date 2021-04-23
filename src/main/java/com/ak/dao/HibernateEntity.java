@@ -1,4 +1,4 @@
-package com.ak.dao
+package com.ak.dao;
 
 public abstract class HibernateEntity {
 }
