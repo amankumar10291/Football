@@ -76,8 +76,20 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.1</version>
+                <version>3.2.2</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -100,5 +112,12 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>maven-repository</id>
+            <url>file:///Users/aman.k/.m2/repository/</url>
+        </repository>
+    </distributionManagement>
 
 </project>
