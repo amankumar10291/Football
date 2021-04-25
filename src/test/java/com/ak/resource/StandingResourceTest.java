@@ -51,7 +51,7 @@ public class StandingResourceTest {
         leagueInfo.setTeamInfos(Collections.singletonList(teamInfo));
         countryInfo = new CountryInfo();
         countryInfo.setCountryId(1);
-        countryInfo.setCountryName("UK");
+        countryInfo.setCountryName("ENGLAND");
         countryInfo.setLeagueInfoList(Collections.singletonList(leagueInfo));
     }
 
@@ -63,32 +63,32 @@ public class StandingResourceTest {
     @Test
     public void getByTeam() throws WorkflowException {
         final List<TeamInfo> teamInfos = Collections.singletonList(teamInfo);
-        when(STANDING_SERVICE.getTeamStandings(1)).thenReturn(teamInfos);
+        when(STANDING_SERVICE.getTeamStandings("LIVERPOOL")).thenReturn(teamInfos);
 
-        List<TeamInfo> response = RESOURCES.target("/standing/getByTeamId/1").request(MediaType.APPLICATION_JSON).get(new GenericType<List<TeamInfo>>() {
+        List<TeamInfo> response = RESOURCES.target("/standing/getByTeam/LIVERPOOL").request(MediaType.APPLICATION_JSON).get(new GenericType<List<TeamInfo>>() {
         });
 
-        verify(STANDING_SERVICE).getTeamStandings(1);
+        verify(STANDING_SERVICE).getTeamStandings("LIVERPOOL");
         assertThat(response).containsAll(teamInfos);
     }
 
     @Test
     public void getByTeamNotFound() {
-        when(STANDING_SERVICE.getTeamStandings(2)).thenThrow(new WorkflowException(Response.Status.NOT_FOUND,"Invalid Team"));
+        when(STANDING_SERVICE.getTeamStandings("LEEDS")).thenThrow(new WorkflowException(Response.Status.NOT_FOUND,"Invalid Team"));
 
-        Response response = RESOURCES.target("/standing/getByTeamId/2").request().get();
+        Response response = RESOURCES.target("/standing/getByTeam/LEEDS").request().get();
 
-        verify(STANDING_SERVICE).getTeamStandings(2);
+        verify(STANDING_SERVICE).getTeamStandings("LEEDS");
         assertThat(response.getStatusInfo().getStatusCode()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
     }
 
     @Test
     public void getByLeague() throws WorkflowException {
-        when(STANDING_SERVICE.getLeagueStandings(1)).thenReturn(leagueInfo);
+        when(STANDING_SERVICE.getLeagueStandings("EPL")).thenReturn(leagueInfo);
 
-        LeagueInfo response = RESOURCES.target("/standing/getByLeagueId/1").request().get(LeagueInfo.class);
+        LeagueInfo response = RESOURCES.target("/standing/getByLeague/EPL").request().get(LeagueInfo.class);
 
-        verify(STANDING_SERVICE).getLeagueStandings(1);
+        verify(STANDING_SERVICE).getLeagueStandings("EPL");
         assertThat(response.getLeagueId()).isEqualTo(1);
         assertThat(response.getLeagueName()).isEqualTo("EPL");
         assertThat(response.getTeamInfos()).contains(teamInfo);
@@ -97,34 +97,34 @@ public class StandingResourceTest {
 
     @Test
     public void getByLeagueNotFound() throws WorkflowException {
-        when(STANDING_SERVICE.getLeagueStandings(2)).thenThrow(new WorkflowException(Response.Status.NOT_FOUND,"Invalid League"));
+        when(STANDING_SERVICE.getLeagueStandings("ECL")).thenThrow(new WorkflowException(Response.Status.NOT_FOUND,"Invalid League"));
 
-        Response response = RESOURCES.target("/standing/getByLeagueId/2").request().get();
+        Response response = RESOURCES.target("/standing/getByLeague/ECL").request().get();
 
-        verify(STANDING_SERVICE).getLeagueStandings(2);
+        verify(STANDING_SERVICE).getLeagueStandings("ECL");
         assertThat(response.getStatusInfo().getStatusCode()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
     }
 
     @Test
     public void getByCountry() throws WorkflowException {
-        when(STANDING_SERVICE.getCountryStandings(1)).thenReturn(countryInfo);
+        when(STANDING_SERVICE.getCountryStandings("ENGLAND")).thenReturn(countryInfo);
 
-        CountryInfo response = RESOURCES.target("/standing/getByCountryId/1").request().get(CountryInfo.class);
+        CountryInfo response = RESOURCES.target("/standing/getByCountry/ENGLAND").request().get(CountryInfo.class);
 
-        verify(STANDING_SERVICE).getCountryStandings(1);
+        verify(STANDING_SERVICE).getCountryStandings("ENGLAND");
         assertThat(response.getCountryId()).isEqualTo(1);
-        assertThat(response.getCountryName()).isEqualTo("UK");
+        assertThat(response.getCountryName()).isEqualTo("ENGLAND");
         assertThat(response.getLeagueInfoList()).contains(leagueInfo);
     }
 
 
     @Test
     public void getByCountryNotFound() throws WorkflowException {
-        when(STANDING_SERVICE.getCountryStandings(2)).thenThrow(new WorkflowException(Response.Status.NOT_FOUND,"Invalid Country"));
+        when(STANDING_SERVICE.getCountryStandings("INDIA")).thenThrow(new WorkflowException(Response.Status.NOT_FOUND,"Invalid Country"));
 
-        Response response = RESOURCES.target("/standing/getByCountryId/2").request().get();
+        Response response = RESOURCES.target("/standing/getByCountry/INDIA").request().get();
 
-        verify(STANDING_SERVICE).getCountryStandings(2);
+        verify(STANDING_SERVICE).getCountryStandings("INDIA");
         assertThat(response.getStatusInfo().getStatusCode()).isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
     }
 

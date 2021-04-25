@@ -4,18 +4,21 @@ import com.ak.dao.LeagueDao;
 import com.ak.dao.LeagueTeamsDao;
 import com.ak.dao.StandingDao;
 import com.ak.dao.TeamDao;
+import com.ak.dto.CountryInfo;
 import com.ak.dto.LeagueInfo;
 import com.ak.dto.TeamInfo;
 import com.ak.entity.League;
 import com.ak.entity.LeagueTeams;
 import com.ak.entity.Team;
 import com.ak.entity.TeamStanding;
+import com.ak.exception.WorkflowException;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import javax.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,6 +41,7 @@ public class StandingServiceTest {
     private League league;
     private LeagueTeams leagueTeams;
     private LeagueInfo leagueInfo;
+    private CountryInfo countryInfo;
 
     @BeforeEach
     public void setUp() {
@@ -62,7 +66,7 @@ public class StandingServiceTest {
         league = new League();
         league.setId(1);
         league.setCountryId(1);
-        league.setCountryname("UK");
+        league.setCountryname("ENGLAND");
         league.setName("EPL");
         leagueTeams = new LeagueTeams();
         leagueTeams.setLeagueId(1);
@@ -72,6 +76,10 @@ public class StandingServiceTest {
         leagueInfo.setLeagueId(1);
         leagueInfo.setLeagueName("EPL");
         leagueInfo.setTeamInfos(Collections.singletonList(teamInfo));
+        countryInfo = new CountryInfo();
+        countryInfo.setCountryId(1);
+        countryInfo.setCountryName("ENGLAND");
+        countryInfo.setLeagueInfoList(Collections.singletonList(leagueInfo));
     }
 
     @AfterEach
@@ -95,14 +103,28 @@ public class StandingServiceTest {
 
     @Test
     public void getLeagueStandings(){
-        when(STANDING_SERVICE.getLeagueStandings(1)).thenReturn(leagueInfo);
+        when(STANDING_SERVICE.getLeagueStandings("EPL")).thenReturn(leagueInfo);
         when(LEAGUE_DAO.findById(1)).thenReturn(league);
         when(LEAGUE_TEAMS_DAO.getTeamsByLeague(1)).thenReturn(Collections.singletonList(leagueTeams));
         when(TEAM_DAO.findById(1)).thenReturn(team);
         when(STANDING_DAO.findByTeamId(1)).thenReturn(Collections.singletonList(teamStanding));
 
-        LeagueInfo list = STANDING_SERVICE.getLeagueStandings(1);
+        LeagueInfo list = STANDING_SERVICE.getLeagueStandings("EPL");
         assertThat(list.getLeagueName()).isEqualTo("EPL");
         assertThat(list.getLeagueId()).isEqualTo(1);
+    }
+
+    @Test
+    public void getCountryStandings(){
+        when(STANDING_SERVICE.getCountryStandings("ENGLAND")).thenReturn(countryInfo);
+        when(STANDING_SERVICE.getLeagueStandings("EPL")).thenReturn(leagueInfo);
+        when(LEAGUE_DAO.findById(1)).thenReturn(league);
+        when(LEAGUE_TEAMS_DAO.getTeamsByLeague(1)).thenReturn(Collections.singletonList(leagueTeams));
+        when(TEAM_DAO.findById(1)).thenReturn(team);
+        when(STANDING_DAO.findByTeamId(1)).thenReturn(Collections.singletonList(teamStanding));
+
+        CountryInfo list = STANDING_SERVICE.getCountryStandings("ENGLAND");
+        assertThat(list.getCountryName()).isEqualTo("ENGLAND");
+        assertThat(list.getCountryId()).isEqualTo(1);
     }
 }

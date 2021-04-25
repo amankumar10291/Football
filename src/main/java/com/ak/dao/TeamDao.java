@@ -34,6 +34,12 @@ public class TeamDao extends AbstractDAO<Team> implements HibernateEntityDao<Tea
         return (Team) criteria.uniqueResult();
     }
 
+    public Team findByName(String name) {
+        Criteria criteria = currentSession().createCriteria(Team.class);
+        criteria.add(Restrictions.eq("name", name));
+        return (Team) criteria.uniqueResult();
+    }
+
     @Override
     public void remove(Team team) {
 

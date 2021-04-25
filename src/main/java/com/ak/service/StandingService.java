@@ -13,11 +13,15 @@ import com.ak.entity.Team;
 import com.ak.entity.TeamStanding;
 import com.ak.exception.WorkflowException;
 import com.google.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+@Slf4j
 public class StandingService implements SService {
 
     private TeamDao teamDao;
@@ -26,7 +30,8 @@ public class StandingService implements SService {
     private LeagueTeamsDao leagueTeamsDao;
 
     @Inject
-    public StandingService(TeamDao teamDao, StandingDao standingDao, LeagueDao leagueDao, LeagueTeamsDao leagueTeamsDao) {
+    public StandingService(TeamDao teamDao, StandingDao standingDao,
+                           LeagueDao leagueDao, LeagueTeamsDao leagueTeamsDao) {
         this.teamDao = teamDao;
         this.standingDao = standingDao;
         this.leagueDao = leagueDao;
@@ -34,25 +39,37 @@ public class StandingService implements SService {
     }
 
     @Override
-    public LeagueInfo getLeagueStandings(int leagueId) throws WorkflowException {
-        League league = leagueDao.findById(leagueId);
+    public LeagueInfo getLeagueStandings(String leagueName) throws WorkflowException {
+        League league = leagueDao.findByName(leagueName.toUpperCase());
         if (league == null)
-            throw new WorkflowException(Response.Status.NOT_FOUND, "Invalid League");
-        List<LeagueTeams> teamIds = leagueTeamsDao.getTeamsByLeague(leagueId);
+            throw new WorkflowException(Response.Status.NOT_FOUND, "League Not found!!");
+
+        List<LeagueTeams> teamIds = leagueTeamsDao.getTeamsByLeague(league.getId());
         if (teamIds == null || teamIds.size() == 0)
             throw new WorkflowException(Response.Status.NOT_FOUND, "No team in this league.");
+
         List<TeamInfo> teamInfos = new ArrayList<>();
         for (LeagueTeams id : teamIds) {
             teamInfos.addAll(getTeamStandings(id.getTeamId()));
         }
+        Collections.sort(teamInfos);
+
         LeagueInfo leagueInfo = new LeagueInfo();
-        leagueInfo.setLeagueId(leagueId);
+        leagueInfo.setLeagueId(league.getId());
         leagueInfo.setLeagueName(league.getName());
         leagueInfo.setTeamInfos(teamInfos);
         return leagueInfo;
     }
 
     @Override
+    public List<TeamInfo> getTeamStandings(String teamName) throws WorkflowException {
+        Team team = teamDao.findByName(teamName.toUpperCase());
+        if (team == null)
+            throw new WorkflowException(Response.Status.NOT_FOUND, "Team not found!!");
+        List<TeamStanding> teamStandings = standingDao.findByTeamId(team.getId());
+        return transformToTeamInfo(team, teamStandings);
+    }
+
     public List<TeamInfo> getTeamStandings(int teamId) throws WorkflowException {
         Team team = teamDao.findById(teamId);
         if (team == null)
@@ -83,17 +100,26 @@ public class StandingService implements SService {
     }
 
     @Override
-    public CountryInfo getCountryStandings(int countryId) throws WorkflowException {
-        List<League> list = leagueDao.getLeaguesByCountry(countryId);
+    public CountryInfo getCountryStandings(String name) throws WorkflowException {
+        List<League> list = leagueDao.getLeaguesByCountry(name.toUpperCase());
         if (list == null || list.size() == 0)
-            throw new WorkflowException(Response.Status.NOT_FOUND, "Invalid Country");
+            throw new WorkflowException(Response.Status.NOT_FOUND, "No leagues found for this country: " + name);
+
         List<LeagueInfo> leagueInfos = new ArrayList<>();
         for (League league : list) {
-            LeagueInfo leagueInfo = getLeagueStandings(league.getId());
-            leagueInfos.add(leagueInfo);
+            try {
+                LeagueInfo leagueInfo = getLeagueStandings(league.getName());
+                leagueInfos.add(leagueInfo);
+            }catch (WorkflowException ex) {
+                LeagueInfo leagueInfo = new LeagueInfo();
+                leagueInfo.setLeagueId(league.getId());
+                leagueInfo.setLeagueName(league.getName());
+                leagueInfos.add(leagueInfo);
+                log.info("League: {} teams not found!!", league.getName());
+            }
         }
         CountryInfo countryInfo = new CountryInfo();
-        countryInfo.setCountryId(countryId);
+        countryInfo.setCountryId(list.get(0).getId());
         countryInfo.setCountryName(list.get(0).getCountryname());
         countryInfo.setLeagueInfoList(leagueInfos);
         return countryInfo;

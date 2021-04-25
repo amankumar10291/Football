@@ -40,9 +40,15 @@ public class LeagueDao extends AbstractDAO<League> implements HibernateEntityDao
 
     }
 
-    public List<League> getLeaguesByCountry(int countryId) {
+    public List<League> getLeaguesByCountry(String country) {
         Criteria criteria = currentSession().createCriteria(League.class);
-        criteria.add(Restrictions.eq("countryId", countryId));
+        criteria.add(Restrictions.eq("countryname", country));
         return criteria.list();
+    }
+
+    public League findByName(String leagueName) {
+        Criteria criteria = currentSession().createCriteria(League.class);
+        criteria.add(Restrictions.eq("name", leagueName));
+        return (League) criteria.uniqueResult();
     }
 }

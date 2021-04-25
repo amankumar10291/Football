@@ -3,18 +3,23 @@ package com.ak.dto;
 import lombok.Data;
 
 @Data
-public class TeamInfo {
+public class TeamInfo implements Comparable<TeamInfo> {
 
-    private int teamId;
+    private Integer teamId;
     private String teamName;
-    private int matchesPlayed;
-    private int matchesWon;
-    private int matchesLoss;
-    private int matchesDrawn;
-    private int goalScored;
-    private int goalFaced;
-    private int points;
-    private int position;
-    private int leagueId;
+    private Integer matchesPlayed;
+    private Integer matchesWon;
+    private Integer matchesLoss;
+    private Integer matchesDrawn;
+    private Integer goalScored;
+    private Integer goalFaced;
+    private Integer points;
+    private Integer position;
+    private Integer leagueId;
     private String season;
+
+    @Override
+    public int compareTo(TeamInfo ob) {
+        return this.getPosition() - ob.getPosition();
+    }
 }

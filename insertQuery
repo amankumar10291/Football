@@ -1,39 +1,68 @@
-INSERT INTO `Continent` (`id`, `name`)
+INSERT INTO `Country` (`id`, `continent`, `name`)
 VALUES
-	(1, 'EUROPE'),
-	(2, 'ASIA');
+	(1, 'EUROPE', 'ENGLAND'),
+	(2, 'EUROPE', 'SPAIN'),
+	(3, 'EUROPE', 'FRANCE'),
+	(4, 'ASIA', 'INDIA');
 
-INSERT INTO `Country` (`id`, `name`, `continent_id`)
+INSERT INTO `city` (`id`, `name`, `COUNTRY_ID`)
 VALUES
-	(1, 'UK', 1),
-	(2, 'SPAIN', 1),
-	(3, 'INDIA', 2);
-INSERT INTO `League` (`id`, `name`, `startedOn`, `country_id`)
-VALUES
-	(1, 'EPL', NULL, 1),
-	(2, 'ISL', NULL, 3),
-	(3, 'LaLiga', NULL, 2);
-INSERT INTO `league_teams` (`id`, `leagueId`, `season`, `team_id`)
-VALUES
-	(1, 1, '2020-2021', 1),
-	(2, 1, '2020-2021', 2),
-	(3, 1, '2020-2021', 3),
-	(4, 1, '2020-2021', 4),
-	(5, 1, '2020-2021', 5);
-INSERT INTO `Team` (`id`, `code`, `foundedAt`, `name`, `teamType`, `city`, `homeGround`)
-VALUES
-	(1, 'LIV', NULL, 'Liverpool', 0, NULL, NULL),
-	(2, 'MUTD', NULL, 'Manchestor United', 0, NULL, NULL),
-	(3, 'MCITY', NULL, 'Manchestor City', 0, NULL, NULL),
-	(4, 'CHE', NULL, 'Chelsea', 0, NULL, NULL),
-	(5, 'TOT', NULL, 'Tottenham', 0, NULL, NULL),
-	(6, 'WOLVES', NULL, 'WOLVERHAMPTON', 0, NULL, NULL);
+	(1, 'LONDON', 1),
+	(2, 'LIVERPOOL', 1),
+	(3, 'BURNLEY', 1),
+	(4, 'LEICESTER', 1),
+	(5, 'MANCHESTER', 1),
+	(6, 'SOUTHAMPTON', 1),
+	(7, 'WOLVERHAMPTON', 1);
 
 
-INSERT INTO `Game` (`id`, `awayTeamScored`, `homeTeamScored`, `playedOn`, `redCard`, `season`, `yellowCard`, `awayTeam_id`, `homeTeam_id`, `league_id`, `stadium_id`)
+INSERT INTO `League` (`id`, `countryId`, `countryname`, `founded`, `name`, `numOfTeams`)
 VALUES
-	(1, 1, 2, NULL, 0, '2020-2021', 0, 2, 1, 1, NULL);
-INSERT INTO `TeamStanding` (`id`, `goalFaced`, `goalScored`, `matchesDrawn`, `matchesLoss`, `matchesPlayed`, `matchesWon`, `points`, `position`, `teamId`)
+	(1, 1, 'ENGLAND', '1992', 'EPL', 20),
+	(2, 1, 'ENGLAND', '1892', 'EFL', 24),
+	(3, 3, 'INDIA', '2013', 'ISL', 11);
+
+INSERT INTO `Team` (`id`, `code`, `founded`, `name`, `nickName`, `teamType`, `city`, `homeGround`)
 VALUES
-	(1, 2, 3, 0, 5, 10, 5, 15, 2, 1),
-	(2, 3, 3, 2, 3, 10, 5, 12, 4, 1);
+	(1, 'ARS', '1886', 'ARSENAL', 'THE GUNNERS', NULL, 1, NULL),
+	(2, 'BUR', '1882', 'BURNLEY', 'THE CLARETS', NULL, 3, NULL),
+	(3, 'CHE', '1905', 'CHELSEA', 'THE BLUES', NULL, 1, NULL),
+	(4, 'EVE', '1888', 'EVERTON', 'The DOGS OF WAR', NULL, 2, NULL),
+	(5, 'LEI', '1884', 'LEICESTER CITY', 'THE FOXES', NULL, 4, NULL),
+	(6, 'LIV', '1892', 'LIVERPOOL', 'THE REDS', NULL, 2, NULL),
+	(7, 'MCI', '1880', 'MANCHESTER CITY', 'THE SKY BLUES', NULL, 5, NULL),
+	(8, 'MUT', '1878', 'MANCHESTER UNITED', 'THE RED DEVILS', NULL, 5, NULL),
+	(9, 'SOU', '1885', 'SOUTHAMPTON', 'THE SAINTS', NULL, 6, NULL),
+	(10, 'TOT', '1882', 'TOTTENHAM HOTSPUR', 'SPURS', NULL, 1, NULL),
+	(11, 'WHU', '1895', 'WEST HAM UNITED', NULL, NULL, 1, NULL),
+	(12, 'CRY', '1905', 'CRYSTAL PALACE', 'THE EAGLES', NULL, 1, NULL),
+	(13, 'WOL', '1877', 'WOLVERHAMPTON', 'WOLVES', NULL, 7, NULL);
+
+
+INSERT INTO `league_teams` (`id`, `leagueId`, `season`, `teamId`)
+VALUES
+	(1, 1, '2019-2020', 1),
+	(2, 1, '2019-2020', 2),
+	(3, 1, '2019-2020', 3),
+	(4, 1, '2019-2020', 4),
+	(5, 1, '2019-2020', 5),
+	(6, 1, '2019-2020', 6),
+	(7, 1, '2019-2020', 7),
+	(8, 1, '2019-2020', 8),
+	(9, 1, '2019-2020', 9),
+	(10, 1, '2019-2020', 10),
+	(11, 1, '2019-2020', 11),
+	(12, 1, '2019-2020', 12),
+	(13, 1, '2019-2020', 13);
+
+INSERT INTO `TeamStanding` (`id`, `goalFaced`, `goalScored`, `leagueId`, `matchesDrawn`, `matchesLoss`, `matchesPlayed`, `matchesWon`, `points`, `position`, `season`, `teamId`)
+VALUES
+	(1, 33, 85, 1, 3, 3, 38, 32, 99, 1, '2019-2020', 6),
+	(2, 35, 102, 1, 3, 9, 38, 26, 81, 2, '2019-2020', 7),
+	(3, 36, 66, 1, 12, 8, 38, 18, 66, 3, '2019-2020', 8),
+	(4, 54, 69, 1, 6, 12, 38, 20, 66, 4, '2019-2020', 3),
+
+	(5, 41, 67, 1, 8, 12, 38, 18, 62, 5, '2019-2020', 5),
+	(6, 47, 61, 1,11,11, 38, 16, 59, 6, '2019-2020', 10),
+	(7, 40, 51, 1, 14,9, 38, 15, 59, 7, '2019-2020', 13),
+	(8, 48, 56, 1, 14,10, 38, 14, 56, 8, '2019-2020', 1);

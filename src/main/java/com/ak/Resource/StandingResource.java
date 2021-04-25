@@ -27,10 +27,10 @@ public class StandingResource {
 
     @GET
     @UnitOfWork
-    @Path("/getByLeagueId/{leagueId}")
-    public Response getByLeague(@PathParam("leagueId") int leagueId) {
+    @Path("/getByLeague/{leagueName}")
+    public Response getByLeague(@PathParam("leagueName") String leagueName) {
         try {
-            LeagueInfo leagueInfo = standingService.getLeagueStandings(leagueId);
+            LeagueInfo leagueInfo = standingService.getLeagueStandings(leagueName);
             return Response.ok().entity(leagueInfo).build();
         } catch (WorkflowException e) {
             return Response.status(e.getStatus()).entity("Message: " + e.getMessage()).build();
@@ -39,10 +39,10 @@ public class StandingResource {
 
     @GET
     @UnitOfWork
-    @Path("/getByTeamId/{teamId}")
-    public Response getByTeam(@PathParam("teamId") int teamId) {
+    @Path("/getByTeam/{team}")
+    public Response getByTeam(@PathParam("team") String teamName) {
         try {
-            List<TeamInfo> list = standingService.getTeamStandings(teamId);
+            List<TeamInfo> list = standingService.getTeamStandings(teamName);
             return Response.ok().entity(list).build();
         } catch (WorkflowException e) {
             return Response.status(e.getStatus()).entity("Message: " + e.getMessage()).build();
@@ -51,10 +51,10 @@ public class StandingResource {
 
     @GET
     @UnitOfWork
-    @Path("/getByCountryId/{countryId}")
-    public Response getByCountry(@PathParam("countryId") int countryId) {
+    @Path("/getByCountry/{country}")
+    public Response getByCountry(@PathParam("country") String country) {
         try {
-            CountryInfo list = standingService.getCountryStandings(countryId);
+            CountryInfo list = standingService.getCountryStandings(country);
             return Response.ok().entity(list).build();
         } catch (WorkflowException e) {
             return Response.status(e.getStatus()).entity("Message: " + e.getMessage()).build();

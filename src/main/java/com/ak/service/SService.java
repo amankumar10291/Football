@@ -8,9 +8,9 @@ import com.ak.exception.WorkflowException;
 import java.util.List;
 
 public interface SService {
-    LeagueInfo getLeagueStandings(int leagueId) throws WorkflowException;
+    LeagueInfo getLeagueStandings(String leagueName) throws WorkflowException;
 
-    List<TeamInfo> getTeamStandings(int teamId) throws WorkflowException;
+    List<TeamInfo> getTeamStandings(String teamName) throws WorkflowException;
 
-    CountryInfo getCountryStandings(int countryId) throws WorkflowException;
+    CountryInfo getCountryStandings(String  countryName) throws WorkflowException;
 }

@@ -15,7 +15,5 @@ public class Country extends HibernateEntity  {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
-    @JoinColumn(name = "continent_id")
-    private Continent continentId;
+    private String continent;
 }
