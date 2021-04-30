@@ -26,6 +26,7 @@ public class FootballApp extends Application<FootballConfig> {
 
     public static void main(String[] args) throws Exception {
         new FootballApp().run(args);
+        System.out.println("*****Application is UP*****");
     }
 
     @Override
